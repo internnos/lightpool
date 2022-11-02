@@ -1,7 +1,7 @@
-use std::fmt::Debug;
+use std::{fmt::Debug, collections::HashMap};
 
-#[derive(Debug)]
-struct Price {
+#[derive(Debug, Eq, Hash, PartialEq)]
+pub struct Price {
     integral: u64,
     fractional: u64,
     scalar: u64
@@ -63,3 +63,29 @@ impl Limit {
     }
 }
 
+
+
+#[derive(Debug)]
+pub struct OrderBook{
+    asks: HashMap<Price, Limit>,
+    bids: HashMap<Price, Limit>
+}
+
+impl OrderBook {
+    pub fn new() -> OrderBook {
+        OrderBook { asks: HashMap::new(), bids: HashMap::new() }
+    }
+    pub fn add_order(&mut self, price: f64, order: Order) {
+        match order.bid_or_ask {
+            BidOrAsk:: Bid => {
+                let limit = self.bids.entry(Price::new(price)).or_insert(Limit::new(price));
+                limit.add_order(order);
+            }, 
+            BidOrAsk:: Ask => {
+                let limit = self.asks.entry(Price::new(price)).or_insert(Limit::new(price));
+                limit.add_order(order);
+            }
+
+        }
+    } 
+}

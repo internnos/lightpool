@@ -1,4 +1,6 @@
-use lightpool::{Order, BidOrAsk, OrderBook};
+// use lightpool::matching_engine::{Order, BidOrAsk, OrderBook};
+
+use lightpool::matching_engine::orderbook::{Order, BidOrAsk, OrderBook};
 
 fn main() {
 

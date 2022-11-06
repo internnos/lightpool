@@ -50,8 +50,7 @@ pub struct Limit {
 }
 
 impl Limit {
-    pub fn new(price: f64) -> Limit {
-        let price = Price::new(price);
+    pub fn new(price: Price) -> Limit {
         let orders =  Vec::new();
         Limit {
             price,
@@ -77,15 +76,16 @@ impl OrderBook {
     }
     pub fn add_order(&mut self, price: f64, order: Order) {
         match order.bid_or_ask {
-            BidOrAsk:: Bid => {
-                let limit = self.bids.entry(Price::new(price)).or_insert(Limit::new(price));
+            BidOrAsk::Ask => {
+                let limit = self.asks.entry(Price::new(price)).or_insert(Limit::new(Price::new(price)));
                 limit.add_order(order);
-            }, 
-            BidOrAsk:: Ask => {
-                let limit = self.asks.entry(Price::new(price)).or_insert(Limit::new(price));
+            },
+            BidOrAsk::Bid => {
+                let limit = self.bids.entry(Price::new(price)).or_insert(Limit::new(Price::new(price)));
                 limit.add_order(order);
             }
-
         }
-    } 
+       
+}
+
 }
